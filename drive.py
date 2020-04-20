@@ -16,6 +16,8 @@ from keras.models import load_model
 import h5py
 from keras import __version__ as keras_version
 
+import json
+
 sio = socketio.Server()
 app = Flask(__name__)
 model = None
@@ -119,6 +121,7 @@ if __name__ == '__main__':
         print('You are using Keras version ', keras_version,
               ', but the model was built using ', model_version)
 
+              
     model = load_model(args.model)
 
     if args.image_folder != '':

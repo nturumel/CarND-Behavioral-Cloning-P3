@@ -13,7 +13,6 @@ def augment():
         reader=csv.reader(csvfile)
         for line in reader:
             samples.append(line)
-        samples=samples[1:]
         for line in samples:
             steering_center=float(line[3])
 
@@ -31,8 +30,7 @@ def augment():
             steering_angles.extend([steering_center, steering_left, steering_right])
 
         samples=[list(a) for a in zip(car_images, steering_angles)]
-        print(len(samples))
-        print(len(samples[0]))
+
 
         with open('modified.csv', 'w') as filehandle:
             for listitem in samples:

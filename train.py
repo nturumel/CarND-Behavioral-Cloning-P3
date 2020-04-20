@@ -14,7 +14,6 @@ with open(r".\modified.csv") as csvfile:
     for line in reader:
         samples.append(line)
 
-
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import ShuffleSplit as shuffle
 # split the samples data set by 80 20 ratio
@@ -38,16 +37,16 @@ def generator(samples,batch_size=32):
             # and append to list
             for batch_sample in batch_samples:
                 # load the image
-                name='./data/IMG/'+batch_sample[0].split('/')[-1]
+                name=r"./data/IMG/"+batch_sample[0].split('/')[-1]
+                name=name.strip()
                 img=cv2.imread(name)
                 angle=batch_sample[1]
                 images.append(img)
                 angles.append(angle)
 
-
-
             X_train=np.array(images)
             y_train=np.array(angles)
+
 
             yield sklearn.utils.shuffle(X_train,y_train)
 
@@ -62,6 +61,9 @@ from keras.layers import Convolution2D, MaxPooling2D
 from keras.layers.core import Dense,Activation,Flatten,Lambda
 from keras.layers import Lambda
 from math import ceil
+from keras import optimizers
+
+adam = optimizers.Adam(lr=0.0001)
 
 batch_size=32
 model=Sequential()
@@ -76,12 +78,12 @@ model.add(Dense(100))
 model.add(Dense(50))
 model.add(Dense(10))
 model.add(Dense(1))
-model.compile(loss='mse',optimizer='adam',metrics=['accuracy'])
-history=model.fit_generator(train_generator,
+model.compile(loss='mse',optimizer=adam,metrics=['accuracy'])
+model.fit_generator(train_generator,
 steps_per_epoch=ceil(len(train_samples)/batch_size),
 validation_data=validation_generator,
 validation_steps=ceil(len(validation_samples)/batch_size),
-epochs=5,verbose=1)
+epochs=20,verbose=1)
 
 print("Completed Training")
 
@@ -90,5 +92,5 @@ model_json = model.to_json()
 with open("model.json", "w") as json_file:
     json_file.write(model_json)
 # serialize weights to HDF5
-model.save_weights("model.h5")
+model.save("model.h5")
 print("Saved model to disk")
