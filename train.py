@@ -2,6 +2,7 @@ import os
 import csv
 import sys
 import augment
+import random
 
 os.chdir(sys.path[0])
 
@@ -18,6 +19,24 @@ from sklearn.model_selection import train_test_split
 from sklearn.model_selection import ShuffleSplit as shuffle
 # split the samples data set by 80 20 ratio
 train_samples, validation_samples = train_test_split(samples,test_size=0.2)
+
+def augment_brightness(image):
+
+    # following guidelines from subodh-malgonde
+
+    # convert to HSV so that its easy to adjust brightness
+    image1 = cv2.cvtColor(image,cv2.COLOR_RGB2HSV)
+
+    # randomly generate the brightness reduction factor
+    # Add a constant so that it prevents the image from being completely dark
+    random_bright = .25+np.random.uniform()
+
+    # Apply the brightness reduction to the V channel
+    image1[:,:,2] = image1[:,:,2]*random_bright
+
+    # convert to RBG again
+    image1 = cv2.cvtColor(image1,cv2.COLOR_HSV2RGB)
+    return image1
 
 import cv2
 import numpy as np
@@ -41,11 +60,20 @@ def generator(samples,batch_size=32):
                 name=name.strip()
                 img=cv2.imread(name)
                 angle=batch_sample[1]
+                #following idea from  citlaligm
+                #noise = (random.random() - 0.5) * 2.0 * 1.2 * 0.04
+                angle=str(float(angle)*noise)
                 images.append(img)
                 angles.append(angle)
+
                 img_flip_lr = cv2.flip(img, 1)
                 images.append(img_flip_lr)
                 angles.append(str(-float(angle)))
+
+                img_bright_aug=augment_brightness(img)
+                images.append(img_bright_aug)
+                angles.append(angle)
+
 
             X_train=np.array(images)
             y_train=np.array(angles)
@@ -72,14 +100,14 @@ batch_size=32
 model=Sequential()
 model.add(Lambda(lambda x: (x / 255.0) - 0.5, input_shape=(160,320,3)))
 model.add(Cropping2D(cropping=((50,20),(0,0))))
-model.add(Convolution2D(24,5,5,subsample=(2,2),activation="relu"))
+model.add(Convolution2D(24,5,5,subsample=(2,2),activation="elu"))
 model.add(MaxPooling2D(pool_size=(2, 2)))
 model.add(Dropout(0.5))
-model.add((Convolution2D(36,5,5,subsample=(2,2),activation="relu")))
+model.add((Convolution2D(36,5,5,subsample=(2,2),activation="elu")))
 model.add(Dropout(0.5))
-model.add(Convolution2D(63,3,3,activation="relu"))
+model.add(Convolution2D(63,3,3,activation="elu"))
 model.add(Dropout(0.5))
-model.add(Convolution2D(63,3,3,activation="relu"))
+model.add(Convolution2D(63,3,3,activation="elu"))
 model.add(Dropout(0.5))
 model.add(Flatten())
 model.add(Dense(100))
@@ -97,8 +125,8 @@ print("Completed Training")
 
 # serialize model to JSON
 model_json = model.to_json()
-with open("model.json", "w") as json_file:
+with open("model2.json", "w") as json_file:
     json_file.write(model_json)
 # serialize weights to HDF5
-model.save("model.h5")
+model.save("model2.h5")
 print("Saved model to disk")
