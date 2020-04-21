@@ -172,6 +172,7 @@ I finally randomly shuffled the data set and put 20% of the data into a validati
 I noticed that sometimes my simulator was sluggish and it had a hard time working out sharp turns. So I decided to manupulate the throttle based on the steering angle. Larger the steering angle lower the speed.
 
 #### Video
-[video compilation](https://youtu.be/uSToEkrpm14)
+You can find my video here.
+[video ](https://youtu.be/uSToEkrpm14)
 
 
