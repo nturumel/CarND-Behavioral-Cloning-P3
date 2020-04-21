@@ -10,7 +10,7 @@ augment.augment()
 
 # load the samples csv
 samples=[]
-with open(r".\modified.csv") as csvfile:
+with open(r"/home/workspace/CarND-Behavioral-Cloning-P3/modified.csv") as csvfile:
     reader=csv.reader(csvfile)
     for line in reader:
         samples.append(line)
@@ -56,7 +56,7 @@ def generator(samples,batch_size=32):
             # and append to list
             for batch_sample in batch_samples:
                 # load the image
-                name=r"./data/IMG/"+batch_sample[0].split('/')[-1]
+                name=r"/home/workspace/CarND-Behavioral-Cloning-P3/data/IMG/"+batch_sample[0].split('/')[-1]
                 name=name.strip()
                 img=cv2.imread(name)
                 angle=batch_sample[1]
@@ -94,6 +94,8 @@ from keras.layers.core import Dense,Activation,Flatten,Lambda
 from keras.layers import Lambda
 from math import ceil
 from keras import optimizers
+from keras.layers import ELU
+
 
 adam = optimizers.Adam(lr=0.001)
 
@@ -101,20 +103,29 @@ batch_size=32
 model=Sequential()
 model.add(Lambda(lambda x: (x / 255.0) - 0.5, input_shape=(160,320,3)))
 model.add(Cropping2D(cropping=((50,20),(0,0))))
-model.add(Convolution2D(24,5,5,subsample=(2,2),activation="elu"))
+model.add(Convolution2D(24, 5, 5,border_mode='valid',subsample=(2,2), dim_ordering='tf', input_shape=(66,200,3), init='he_normal'))
+model.add(Activation('relu'))
+model.add(Convolution2D(36, 5, 5, border_mode='valid',subsample=(2,2), init='he_normal'))
+model.add(Activation('relu'))
+model.add(Convolution2D(48, 5, 5, border_mode='valid',subsample=(2,2),init='he_normal'))
+model.add(Activation('relu'))
+model.add(Convolution2D(64, 3, 3, border_mode='valid',subsample=(1,1),init='he_normal'))
+model.add(Activation('relu'))
+model.add(Convolution2D(64, 3, 3, border_mode='valid',subsample=(1,1),init='he_normal'))
 model.add(MaxPooling2D(pool_size=(2, 2)))
 model.add(Dropout(0.5))
-model.add((Convolution2D(36,5,5,subsample=(2,2),activation="elu")))
-model.add(Dropout(0.5))
-model.add(Convolution2D(63,3,3,activation="elu"))
-model.add(Dropout(0.5))
-model.add(Convolution2D(63,3,3,activation="elu"))
-model.add(Dropout(0.5))
+model.add(Activation('relu'))
 model.add(Flatten())
-model.add(Dense(100))
-model.add(Dense(50))
-model.add(Dense(10))
-model.add(Dense(1))
+model.add(Activation('relu'))
+model.add(Dense(1164,init='he_normal'))
+model.add(Activation('relu'))
+model.add(Dense(100,init='he_normal'))
+model.add(Activation('relu'))
+model.add(Dense(50,init='he_normal'))
+model.add(Activation('relu'))
+model.add(Dense(10,init='he_normal'))
+model.add(Activation('relu'))
+model.add(Dense(1,name='output',init='he_normal'))
 model.compile(loss='mse',optimizer=adam,metrics=['accuracy'])
 model.fit_generator(train_generator,
 steps_per_epoch=ceil(len(train_samples)/batch_size),
@@ -126,8 +137,8 @@ print("Completed Training")
 
 # serialize model to JSON
 model_json = model.to_json()
-with open("model2.json", "w") as json_file:
+with open("model7.json", "w") as json_file:
     json_file.write(model_json)
 # serialize weights to HDF5
-model.save("model2.h5")
+model.save("model7.h5")
 print("Saved model to disk")
