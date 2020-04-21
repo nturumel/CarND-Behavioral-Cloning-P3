@@ -1,9 +1,4 @@
 # **Behavioral Cloning** 
-
-## Writeup Template
-
-### You can use this file as a template for your writeup if you want to submit it as a markdown file, but feel free to use some other method and submit a pdf if you prefer.
-
 ---
 
 **Behavioral Cloning Project**
@@ -18,21 +13,15 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./examples/placeholder.png "Model Visualization"
-[image2]: ./examples/placeholder.png "Grayscaling"
-[image3]: ./examples/placeholder_small.png "Recovery Image"
-[image4]: ./examples/placeholder_small.png "Recovery Image"
-[image5]: ./examples/placeholder_small.png "Recovery Image"
-[image6]: ./examples/placeholder_small.png "Normal Image"
+[image1]: "./examples/center_2020_04_19_21_24_48_878.jpg" "Image Visualization"
+[image2]: ./examples/center_2020_04_19_21_24_48_878_cropped.jpg "Cropping"
+[image3]: ./examples/center_2020_04_19_21_24_48_878_cropped_flipped.jpg "Flipped"
+[image4]: ./examples/left_2020_04_19_21_24_48_878.jpg "Left"
+[image5]: ./examples/right_2020_04_19_21_24_48_878.jpg "Right Image"
+[image6]: ./examples/right_2020_04_19_21_24_48_878.jpg "Normal Image"
 [image7]: ./examples/placeholder_small.png "Flipped Image"
 
-## Rubric Points
-### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
-
----
-### Files Submitted & Code Quality
-
-#### 1. Submission includes all required files and can be used to run the simulator in autonomous mode
+#### 1. Project includes all required files and can be used to run the simulator in autonomous mode
 
 My project includes the following files:
 * model.py containing the script to create and train the model
@@ -40,13 +29,13 @@ My project includes the following files:
 * model.h5 containing a trained convolution neural network 
 * writeup_report.md or writeup_report.pdf summarizing the results
 
-#### 2. Submission includes functional code
+#### 2. Project includes functional code
 Using the Udacity provided simulator and my drive.py file, the car can be driven autonomously around the track by executing 
 ```sh
 python drive.py model.h5
 ```
 
-#### 3. Submission code is usable and readable
+#### 3. Project code is usable and readable
 
 The model.py file contains the code for training and saving the convolution neural network. The file shows the pipeline I used for training and validating the model, and it contains comments to explain how the code works.
 
@@ -54,15 +43,61 @@ The model.py file contains the code for training and saving the convolution neur
 
 #### 1. An appropriate model architecture has been employed
 
-My model consists of a convolution neural network with 3x3 filter sizes and depths between 32 and 128 (model.py lines 18-24) 
+My model is based on CNN architechture developed by the autonmous driving team at NVIDIA.
+##### 1. A normalisation layer.
+It consists of:model.add(Lambda(lambda x: (x / 255.0) - 0.5, input_shape=(160,320,3)))
 
-The model includes RELU layers to introduce nonlinearity (code line 20), and the data is normalized in the model using a Keras lambda layer (code line 18). 
+##### 2. A cropping layer.
+model.add(Cropping2D(cropping=((50,20),(0,0))))
+
+##### 3. A CNN layer of size of 24 x 5 x 5 followed by relu activation.
+model.add(Convolution2D(24,5,5,subsample=(2,2),activation="relu"))
+
+##### 3. A Maxpooling layer of size 2 x 2.
+model.add(MaxPooling2D(pool_size=(2, 2)))
+
+##### 4. A Dropout Layer.
+model.add(Dropout(0.5))
+
+##### 5. A CNN layer of size of 36 x 5 x 5 followed by relu activation.
+model.add((Convolution2D(36,5,5,subsample=(2,2),activation="relu")))
+
+##### 6. A Dropout Layer.
+model.add(Dropout(0.5))
+
+##### 7. A CNN layer of size of 36 x 5 x 5 followed by relu activation.
+model.add(Convolution2D(63,3,3,activation="relu"))
+
+##### 8. A Dropout Layer.
+model.add(Dropout(0.5))
+
+##### 9. A CNN layer of size of 36 x 5 x 5 followed by relu activation.
+model.add(Convolution2D(63,3,3,activation="relu"))
+
+##### 10. A Dropout Layer.
+model.add(Dropout(0.5))
+
+##### 11. A Flattening Layer.
+model.add(Flatten())
+
+##### 12. A Series of Fully Connected Layer.
+model.add(Dense(100))
+model.add(Dense(50))
+model.add(Dense(10))
+
+##### 13. Output (Predicted angle).
+model.add(Dense(1))
+
 
 #### 2. Attempts to reduce overfitting in the model
 
-The model contains dropout layers in order to reduce overfitting (model.py lines 21). 
+The model contains dropout layers in order to reduce overfitting. 
 
-The model was trained and validated on different data sets to ensure that the model was not overfitting (code line 10-16). The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
+The model was trained and validated on different data sets to ensure that the model was not overfitting.
+
+I recorded laps in the forward and backward direction to prevent a specific side from dominating the training data.
+
+The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
 
 #### 3. Model parameter tuning
 
