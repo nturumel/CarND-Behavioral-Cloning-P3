@@ -18,7 +18,6 @@ The goals / steps of this project are the following:
 [image3]: ./examples/center_2020_04_19_21_24_48_878_cropped_flipped.jpg "Flipped"
 [image4]: ./examples/left_2020_04_19_21_24_48_878.jpg "Left"
 [image5]: ./examples/right_2020_04_19_21_24_48_878.jpg "Right Image"
-[video1]: ./examples/run5.mp4 "Video"
 
 #### 1. Project includes all required files and can be used to run the simulator in autonomous mode
 
@@ -152,7 +151,7 @@ I also made use of the left and right side camera images by adding and subtracti
 I also noticed that the pertainaint data required for predicting angles lay in the middle of the image, so I added a cropping layer.
 ![alt text][image2]
 
-To augment the data sat, I also flipped images and angles thinking that this would provide me with instances of opposite velocity. For example, here is an image that has then been flipped.
+To augment the data set, I also flipped images and angles thinking that this would provide me with instances of opposite velocity. For example, here is an image that has then been flipped.
 
 I was facing problem at a specific spot after the bridge the car went straight ahead into the dirt road, I realised that this was happening beacuse a baricade was absent and that it was not differentiating between the road and the dirt, so in order to work around that I added a random brightness augmentation.
 
@@ -173,6 +172,6 @@ I finally randomly shuffled the data set and put 20% of the data into a validati
 I noticed that sometimes my simulator was sluggish and it had a hard time working out sharp turns. So I decided to manupulate the throttle based on the steering angle. Larger the steering angle lower the speed.
 
 #### Video
-![alt text][video1]
+[video compilation](https://youtu.be/uSToEkrpm14)
 
 
