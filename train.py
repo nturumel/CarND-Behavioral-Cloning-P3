@@ -43,6 +43,9 @@ def generator(samples,batch_size=32):
                 angle=batch_sample[1]
                 images.append(img)
                 angles.append(angle)
+                img_flip_lr = cv2.flip(img, 1)
+                images.append(img_flip_lr)
+                angles.append(str(-float(angle)))
 
             X_train=np.array(images)
             y_train=np.array(angles)
@@ -57,22 +60,27 @@ import tensorflow as tf
 import keras
 from keras.models import Sequential
 from keras.layers import Cropping2D
-from keras.layers import Convolution2D, MaxPooling2D
+from keras.layers import Convolution2D, MaxPooling2D,Dropout
 from keras.layers.core import Dense,Activation,Flatten,Lambda
 from keras.layers import Lambda
 from math import ceil
 from keras import optimizers
 
-adam = optimizers.Adam(lr=0.0001)
+adam = optimizers.Adam(lr=0.001)
 
 batch_size=32
 model=Sequential()
 model.add(Lambda(lambda x: (x / 255.0) - 0.5, input_shape=(160,320,3)))
 model.add(Cropping2D(cropping=((50,20),(0,0))))
 model.add(Convolution2D(24,5,5,subsample=(2,2),activation="relu"))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Dropout(0.5))
 model.add((Convolution2D(36,5,5,subsample=(2,2),activation="relu")))
+model.add(Dropout(0.5))
 model.add(Convolution2D(63,3,3,activation="relu"))
+model.add(Dropout(0.5))
 model.add(Convolution2D(63,3,3,activation="relu"))
+model.add(Dropout(0.5))
 model.add(Flatten())
 model.add(Dense(100))
 model.add(Dense(50))
