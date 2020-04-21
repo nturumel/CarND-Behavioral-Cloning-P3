@@ -44,48 +44,48 @@ The model.py file contains the code for training and saving the convolution neur
 My model is based on CNN architechture developed by the autonmous driving team at NVIDIA.
 It consists of:
 ##### 1. A normalisation layer.
-##### model.add(Lambda(lambda x: (x / 255.0) - 0.5, input_shape=(160,320,3)))
+###### model.add(Lambda(lambda x: (x / 255.0) - 0.5, input_shape=(160,320,3)))
 
 ##### 2. A cropping layer.
-##### model.add(Cropping2D(cropping=((50,20),(0,0))))
+###### model.add(Cropping2D(cropping=((50,20),(0,0))))
 
 ##### 3. A CNN layer of size of 24 x 5 x 5 followed by relu activation.
-##### model.add(Convolution2D(24,5,5,subsample=(2,2),activation="relu"))
+###### model.add(Convolution2D(24,5,5,subsample=(2,2),activation="relu"))
 
 ##### 3. A Maxpooling layer of size 2 x 2.
-##### model.add(MaxPooling2D(pool_size=(2, 2)))
+###### model.add(MaxPooling2D(pool_size=(2, 2)))
 
 ##### 4. A Dropout Layer.
-##### model.add(Dropout(0.5))
+###### model.add(Dropout(0.5))
 
 ##### 5. A CNN layer of size of 36 x 5 x 5 followed by relu activation.
-##### model.add((Convolution2D(36,5,5,subsample=(2,2),activation="relu")))
+###### model.add((Convolution2D(36,5,5,subsample=(2,2),activation="relu")))
 
 ##### 6. A Dropout Layer.
-model.add(Dropout(0.5))
+###### model.add(Dropout(0.5))
 
 ##### 7. A CNN layer of size of 36 x 5 x 5 followed by relu activation.
-##### model.add(Convolution2D(63,3,3,activation="relu"))
+###### model.add(Convolution2D(63,3,3,activation="relu"))
 
 ##### 8. A Dropout Layer.
-##### model.add(Dropout(0.5))
+###### model.add(Dropout(0.5))
 
 ##### 9. A CNN layer of size of 36 x 5 x 5 followed by relu activation.
-##### model.add(Convolution2D(63,3,3,activation="relu"))
+###### model.add(Convolution2D(63,3,3,activation="relu"))
 
 ##### 10. A Dropout Layer.
-##### model.add(Dropout(0.5))
+###### model.add(Dropout(0.5))
 
 ##### 11. A Flattening Layer.
-##### model.add(Flatten())
+###### model.add(Flatten())
 
 ##### 12. A Series of Fully Connected Layer.
-##### model.add(Dense(100))
-##### model.add(Dense(50))
-##### model.add(Dense(10))
+###### model.add(Dense(100))
+###### model.add(Dense(50))
+###### model.add(Dense(10))
 
 ##### 13. Output (Predicted angle).
-##### model.add(Dense(1))
+###### model.add(Dense(1))
 
 
 #### 2. Attempts to reduce overfitting in the model
