@@ -1,1 +1,0 @@
-pictures are 160 high(y) * 320 wide (x)
