@@ -13,7 +13,7 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: "./examples/center_2020_04_19_21_24_48_878.jpg" "Image Visualization"
+[image1]: ./examples/center_2020_04_19_21_24_48_878.jpg "Image Visualization"
 [image2]: ./examples/center_2020_04_19_21_24_48_878_cropped.jpg "Cropping"
 [image3]: ./examples/center_2020_04_19_21_24_48_878_cropped_flipped.jpg "Flipped"
 [image4]: ./examples/left_2020_04_19_21_24_48_878.jpg "Left"
