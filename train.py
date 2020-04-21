@@ -61,6 +61,7 @@ def generator(samples,batch_size=32):
                 img=cv2.imread(name)
                 angle=batch_sample[1]
                 #following idea from  citlaligm
+                noise=1
                 #noise = (random.random() - 0.5) * 2.0 * 1.2 * 0.04
                 angle=str(float(angle)*noise)
                 images.append(img)
