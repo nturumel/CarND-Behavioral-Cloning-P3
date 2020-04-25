@@ -173,6 +173,6 @@ I noticed that sometimes my simulator was sluggish and it had a hard time workin
 
 #### Video
 You can find my video here.
-[video ](https://youtu.be/uSToEkrpm14)
+[video ](https://youtu.be/HnYVVjBDCSw)
 
 
