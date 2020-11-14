@@ -59,7 +59,7 @@ def buildModel():
     x = base_model(x, training = False)
     x = converge(x)
     x = dropout(x)
-    x = Flatten(x)
+    x = Flatten()(x)
     x = Dense(100)(x)
     x = dropout(x)
     x = activate(x)
