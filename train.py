@@ -45,7 +45,7 @@ def buildModel():
     IMG_SHAPE=IMG_SIZE + (3,)
     
     # define key layers
-    data_augmentation = tf.keras.Sequential([ tf.keras.layers.experential.preprocessing.RandomContrast([0, 0.5])])
+    data_augmentation = tf.keras.Sequential([ tf.keras.layers.experimental.preprocessing.RandomContrast([0, 0.5])])
     preprocess_input = tf.keras.applications.mobilenet_v2.preprocess_input
     rescale = tf.keras.layers.experimental.preprocessing.Rescaling(1./127.5, offset= -1)
     base_model = tf.keras.applications.MobileNetV2(input_shape=IMG_SHAPE, include_top=False, weights='imagenet')
