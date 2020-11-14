@@ -80,3 +80,8 @@ def buildModel():
     print(model.summary())
     return model
 
+if __name__ == "__main__":
+    train_generator, valid_generator = buildGenerator()
+    model = buildModel()
+    checkpoint = ModelCheckpoint("steering_prediction_model.h5", monitor='val_loss', verbose=1, save_best_only=True, mode='auto', period=1)
+    model.fit_generator(train_generator, steps_per_epoch = train_generator.samples // batch_size, validation_data = validation_generator, validation_steps = validation_generator.samples // batch_size, epochs = nb_epochs, callbacks=[checkpoint])
