@@ -33,18 +33,11 @@ def add_noise(img):
 
 def buildGenerator():
     train_label_df = pd.read_csv(TRAIN_FILE, delimiter=',', header=None, names=['id', 'score'])
-    datagen = ImageDataGenerator(brightness_range = [0.2,1.0], 
-                                    channel_shift_range = 150.0,
-                                    preprocessing_function = add_noise,
-                                     validation_split=0.25)
-    train_generator = datagen.flow_from_dataframe(dataframe=train_label_df, directory=IMG_DIR, 
-                                              x_col="id", y_col="score", subset="training", has_ext=True, 
-                                              class_mode="other", shuffle=True, target_size=IMG_SIZE), 
-                                              batch_size=BATCH_SIZE)
-    valid_generator = datagen.flow_from_dataframe(dataframe=train_label_df, directory=IMG_DIR, 
-                                              x_col="id", y_col="score", subset="validation", has_ext=True, 
-                                              class_mode="other", shuffle=True, target_size=IMG_SIZE, 
-                                              batch_size=BATCH_SIZE)
+    datagen = ImageDataGenerator(brightness_range = [0.2,1.0], channel_shift_range = 150.0, preprocessing_function = add_noise, validation_split = 0.25)
+    print("getting train generator")
+    train_generator = datagen.flow_from_dataframe(dataframe = train_label_df, directory = IMG_DIR, x_col = "id", y_col = "score", subset = "training", has_ext = True, class_mode = "other", shuffle = True, target_size = IMG_SIZE, batch_size = BATCH_SIZE)
+    print("getting validation generator")
+    valid_generator = datagen.flow_from_dataframe(dataframe = train_label_df, directory = IMG_DIR, x_col = "id", y_col = "score", subset = "validation", has_ext = True, class_mode = "other", shuffle = True, target_size = IMG_SIZE, batch_size = BATCH_SIZE)
     return train_generator, valid_generator
 
 def buildModel():
