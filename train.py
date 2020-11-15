@@ -10,6 +10,7 @@ from keras.layers import Dense, Activation, Flatten, Dropout, BatchNormalization
 from keras import regularizers, optimizers
 from keras import utils as np_utils
 from keras.callbacks import ModelCheckpoint
+from tensorflow.python.keras.layers.preprocessing.image_preprocessing import _RandomGenerator
 
 TRAIN_FILE = R"./CarND-Behavioral-Cloning-P3/data/filenames_angles.csv"
 IMG_DIR = './CarND-Behavioral-Cloning-P3/data/IMG'
@@ -21,7 +22,7 @@ NB_EPOCH = 10
 def add_noise(img):
     '''Add random noise to an image'''
     VARIABILITY = 50
-    deviation = VARIABILITY*random.random()
+    deviation = VARIABILITY*_RandomGenerator.random()
     noise = np.random.normal(0, deviation, img.shape)
     img += noise
     np.clip(img, 0., 255.)
@@ -29,7 +30,6 @@ def add_noise(img):
 
 def buildGenerator():
     train_label_df = pd.read_csv(TRAIN_FILE, delimiter = ',', header = None, names = ['id', 'score'])
-    print (train_label_df)
     datagen = ImageDataGenerator(brightness_range = [0.2,1.0], channel_shift_range = 150.0,  validation_split = 0.25)
     print("getting train generator")
     train_generator = datagen.flow_from_dataframe(dataframe = train_label_df, directory = IMG_DIR, x_col = "id", y_col = "score", subset = "training", has_ext = True, class_mode = "raw", shuffle = True, target_size = IMG_SIZE, batch_size = BATCH_SIZE, save_to_dir = SAVE_DIR, save_prefix = 'train', save_format = 'jpeg')
