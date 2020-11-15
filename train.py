@@ -8,6 +8,7 @@ import pandas as pd
 from keras_preprocessing.image import ImageDataGenerator
 from keras.layers import Dense, Activation, Flatten, Dropout, BatchNormalization
 from keras import regularizers, optimizers
+from keras import utils as np_utils
 
 '''
 
