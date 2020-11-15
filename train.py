@@ -39,9 +39,9 @@ def buildGenerator():
     train_label_df = pd.read_csv(TRAIN_FILE, delimiter=',', header=None, names=['id', 'score'])
     datagen = ImageDataGenerator(brightness_range = [0.2,1.0], channel_shift_range = 150.0, preprocessing_function = add_noise, validation_split = 0.25)
     print("getting train generator")
-    train_generator = datagen.flow_from_dataframe(dataframe = train_label_df, directory = IMG_DIR, x_col = "id", y_col = "score", subset = "training", has_ext = True, class_mode = "other", shuffle = True, target_size = IMG_SIZE, batch_size = BATCH_SIZE)
+    train_generator = datagen.flow_from_dataframe(dataframe = train_label_df, directory = IMG_DIR, x_col = "id", y_col = "score", subset = "training", has_ext = True, class_mode = "binary", shuffle = True, target_size = IMG_SIZE, batch_size = BATCH_SIZE)
     print("getting validation generator")
-    valid_generator = datagen.flow_from_dataframe(dataframe = train_label_df, directory = IMG_DIR, x_col = "id", y_col = "score", subset = "validation", has_ext = True, class_mode = "other", shuffle = True, target_size = IMG_SIZE, batch_size = BATCH_SIZE)
+    valid_generator = datagen.flow_from_dataframe(dataframe = train_label_df, directory = IMG_DIR, x_col = "id", y_col = "score", subset = "validation", has_ext = True, class_mode = "binary", shuffle = True, target_size = IMG_SIZE, batch_size = BATCH_SIZE)
     return train_generator, valid_generator
 
 def buildModel():
@@ -81,4 +81,17 @@ if __name__ == "__main__":
     train_generator, valid_generator = buildGenerator()
     model = buildModel()
     checkpoint = ModelCheckpoint("steering_prediction_model.h5", monitor='val_loss', verbose=1, save_best_only=True, mode='auto', period=1)
-    model.fit_generator(train_generator, steps_per_epoch = train_generator.samples // BATCH_SIZE, validation_data = valid_generator, validation_steps = valid_generator.samples // BATCH_SIZE, epochs = NB_EPOCH, callbacks=[checkpoint])
+    model.fit_generator(train_generator, steps_per_epoch = train_generator.samples // BATCH_SIZE, validation_data = valid_generator, validation_steps = valid_generator.samples // BATCH_SIZE, epochs = NB_EPOCH, callbacks = [checkpoint])
+
+
+
+    '''
+ 
+    flow_from_dataframe(
+    dataframe, directory=None, x_col='filename', y_col='class', weight_col=None,
+    target_size=(256, 256), color_mode='rgb', classes=None,
+    class_mode='categorical', batch_size=32, shuffle=True, seed=None,
+    save_to_dir=None, save_prefix='', save_format='png', subset=None,
+    interpolation='nearest', validate_filenames=True, **kwargs
+)
+    '''
