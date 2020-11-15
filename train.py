@@ -79,9 +79,9 @@ def buildModel():
 
 if __name__ == "__main__":
     train_generator, valid_generator = buildGenerator()
-    x,y = val_generator.next()
     # added debug code
-    for i in range(0,1):
+    x,y = valid_generator.next()
+        for i in range(0,1):
         image = x[i]
         plt.imshow(image.transpose(2,1,0))
         plt.show()
