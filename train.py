@@ -24,7 +24,8 @@ TRAIN_FILE = R"./CarND-Behavioral-Cloning-P3/data/filenames_angles.csv"
 IMG_DIR = R"./CarND-Behavioral-Cloning-P3/data/IMG"
 BATCH_SIZE = 32
 IMG_SIZE = (160, 160)
-   
+NB_EPOCH = 10
+
 def add_noise(img):
     '''Add random noise to an image'''
     VARIABILITY = 50
@@ -80,4 +81,4 @@ if __name__ == "__main__":
     train_generator, valid_generator = buildGenerator()
     model = buildModel()
     checkpoint = ModelCheckpoint("steering_prediction_model.h5", monitor='val_loss', verbose=1, save_best_only=True, mode='auto', period=1)
-    model.fit_generator(train_generator, steps_per_epoch = train_generator.samples // BATCH_SIZE, validation_data = valid_generator, validation_steps = valid_generator.samples // BATCH_SIZE, epochs = nb_epochs, callbacks=[checkpoint])
+    model.fit_generator(train_generator, steps_per_epoch = train_generator.samples // BATCH_SIZE, validation_data = valid_generator, validation_steps = valid_generator.samples // BATCH_SIZE, epochs = NB_EPOCH, callbacks=[checkpoint])
