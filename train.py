@@ -21,7 +21,7 @@ model3.fit_generator(generator=train_generator,
 
 '''
 TRAIN_FILE = R"./CarND-Behavioral-Cloning-P3/data/filenames_angles.csv"
-IMG_DIR = 'CarND-Behavioral-Cloning-P3/data/IMG'
+IMG_DIR = './CarND-Behavioral-Cloning-P3/data/IMG'
 BATCH_SIZE = 32
 IMG_SIZE = (160, 160)
 NB_EPOCH = 10
@@ -42,7 +42,7 @@ def buildGenerator():
     print("getting train generator")
     train_generator = datagen.flow_from_dataframe(dataframe = train_label_df, directory = IMG_DIR, x_col = "id", y_col = "score", subset = "training", has_ext = True, class_mode = "raw", shuffle = True, target_size = IMG_SIZE, batch_size = BATCH_SIZE, save_to_dir = './augmented/train/', validate_filenames = False)
     print("getting validation generator")
-    valid_generator = datagen.flow_from_dataframe(dataframe = train_label_df, directory = IMG_DIR, x_col = "id", y_col = "score", subset = "validation", has_ext = True, class_mode = "raw", shuffle = True, target_size = IMG_SIZE, batch_size = BATCH_SIZE, save_to_dir = './augmented/train/', validate_filenames = False)
+    valid_generator = datagen.flow_from_dataframe(dataframe = train_label_df, directory = IMG_DIR, x_col = "id", y_col = "score", subset = "validation", has_ext = True, class_mode = "raw", shuffle = True, target_size = IMG_SIZE, batch_size = BATCH_SIZE, save_to_dir = './augmented/validate/', validate_filenames = False)
     return train_generator, valid_generator
 
 def buildModel():
