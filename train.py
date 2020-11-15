@@ -79,6 +79,13 @@ def buildModel():
 
 if __name__ == "__main__":
     train_generator, valid_generator = buildGenerator()
+    x,y = val_generator.next()
+    # added debug code
+    for i in range(0,1):
+        image = x[i]
+        plt.imshow(image.transpose(2,1,0))
+        plt.show()
+
     model = buildModel()
     checkpoint = ModelCheckpoint("steering_prediction_model.h5", monitor='val_loss', verbose=1, save_best_only=True, mode='auto', period=1)
     model.fit_generator(train_generator, steps_per_epoch = train_generator.samples // BATCH_SIZE, validation_data = valid_generator, validation_steps = valid_generator.samples // BATCH_SIZE, epochs = NB_EPOCH, callbacks = [checkpoint])
