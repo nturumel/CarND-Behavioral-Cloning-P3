@@ -11,14 +11,6 @@ from keras import regularizers, optimizers
 from keras import utils as np_utils
 from keras.callbacks import ModelCheckpoint
 
-'''
-
-
-model3.fit_generator(generator=train_generator,
-                    steps_per_epoch=STEP_SIZE_TRAIN,
-                    epochs=10
-
-'''
 TRAIN_FILE = R"./CarND-Behavioral-Cloning-P3/data/filenames_angles.csv"
 IMG_DIR = './CarND-Behavioral-Cloning-P3/data/IMG'
 SAVE_DIR = './CarND-Behavioral-Cloning-P3/augmented'
@@ -89,15 +81,3 @@ if __name__ == "__main__":
     checkpoint = ModelCheckpoint("steering_prediction_model.h5", monitor='val_loss', verbose=1, save_best_only=True, mode='auto', period=1)
     model.fit_generator(train_generator, steps_per_epoch = train_generator.samples // BATCH_SIZE, validation_data = valid_generator, validation_steps = valid_generator.samples // BATCH_SIZE, epochs = NB_EPOCH, callbacks = [checkpoint])
 
-
-
-    '''
- 
-    flow_from_dataframe(
-    dataframe, directory=None, x_col='filename', y_col='class', weight_col=None,
-    target_size=(256, 256), color_mode='rgb', classes=None,
-    class_mode='categorical', batch_size=32, shuffle=True, seed=None,
-    save_to_dir=None, save_prefix='', save_format='png', subset=None,
-    interpolation='nearest', validate_filenames=True, **kwargs
-)
-    '''
