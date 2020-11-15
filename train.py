@@ -36,7 +36,8 @@ def add_noise(img):
     return img
 
 def buildGenerator():
-    train_label_df = pd.read_csv(TRAIN_FILE, delimiter=',', header=None, names=['id', 'score'])
+    train_label_df = pd.read_csv(TRAIN_FILE, delimiter = ',', header = None, names = ['id', 'score'])
+    print (train_label_df)
     datagen = ImageDataGenerator(brightness_range = [0.2,1.0], channel_shift_range = 150.0, preprocessing_function = add_noise, validation_split = 0.25)
     print("getting train generator")
     train_generator = datagen.flow_from_dataframe(dataframe = train_label_df, directory = IMG_DIR, x_col = "id", y_col = "score", subset = "training", has_ext = True, class_mode = "other", shuffle = True, target_size = IMG_SIZE, batch_size = BATCH_SIZE)
@@ -46,13 +47,13 @@ def buildGenerator():
 
 def buildModel():
     
-    IMG_SHAPE=IMG_SIZE + (3,)
+    IMG_SHAPE = IMG_SIZE + (3,)
     
     # define key layers
     data_augmentation = tf.keras.Sequential([ tf.keras.layers.experimental.preprocessing.RandomContrast([0, 0.5])])
     preprocess_input = tf.keras.applications.mobilenet_v2.preprocess_input
     rescale = tf.keras.layers.experimental.preprocessing.Rescaling(1./127.5, offset= -1)
-    base_model = tf.keras.applications.MobileNetV2(input_shape=IMG_SHAPE, include_top=False, weights='imagenet')
+    base_model = tf.keras.applications.MobileNetV2(input_shape = IMG_SHAPE, include_top = False, weights = 'imagenet')
     converge = tf.keras.layers.GlobalAveragePooling2D()
     dropout = Dropout(0.2)
     activate = Activation('relu')
