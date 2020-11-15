@@ -81,7 +81,7 @@ if __name__ == "__main__":
     train_generator, valid_generator = buildGenerator()
     # added debug code
     x,y = valid_generator.next()
-        for i in range(0,1):
+    for i in range(0,1):
         image = x[i]
         plt.imshow(image.transpose(2,1,0))
         plt.show()
