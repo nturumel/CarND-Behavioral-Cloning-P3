@@ -21,7 +21,7 @@ model3.fit_generator(generator=train_generator,
 
 '''
 TRAIN_FILE = R"./CarND-Behavioral-Cloning-P3/data/filenames_angles.csv"
-IMG_DIR = R"./CarND-Behavioral-Cloning-P3/data/IMG/ "
+IMG_DIR = 'CarND-Behavioral-Cloning-P3/data/IMG'
 BATCH_SIZE = 32
 IMG_SIZE = (160, 160)
 NB_EPOCH = 10
