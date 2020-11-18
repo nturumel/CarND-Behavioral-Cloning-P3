@@ -26,6 +26,11 @@ app = Flask(__name__)
 model = None
 prev_image_array = None
 
+'''
+pip install --upgrade tensorflow
+pip install --upgrade keras
+pip install --upgrade python
+'''
 
 class SimplePIController:
     def __init__(self, Kp, Ki):
@@ -126,7 +131,9 @@ if __name__ == '__main__':
         print('You are using Keras version ', keras_version,
               ', but the model was built using ', model_version)
     model = buildModel()
-    model = model.load_weights(args.model)
+    model.load_weights(args.model)
+    if(model == None):
+        print("It is None")
 
 
     if args.image_folder != '':
