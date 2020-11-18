@@ -13,9 +13,13 @@ from flask import Flask
 from io import BytesIO
 
 from keras.models import load_model
+from keras.callbacks import ModelCheckpoint
 import h5py
 from keras import __version__ as keras_version
 from tensorflow.python.keras.saving.hdf5_format import load_weights_from_hdf5_group
+from train import buildModel
+from keras import Model
+from keras.callbacks import ModelCheckpoint
 
 sio = socketio.Server()
 app = Flask(__name__)
@@ -121,8 +125,9 @@ if __name__ == '__main__':
     if model_version != keras_version:
         print('You are using Keras version ', keras_version,
               ', but the model was built using ', model_version)
+    model = buildModel()
+    model = model.load_weights(args.model)
 
-    model = load_weights_from_hdf5_group(args.model)
 
     if args.image_folder != '':
         print("Creating image folder at {}".format(args.image_folder))
