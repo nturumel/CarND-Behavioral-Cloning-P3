@@ -33,6 +33,8 @@ pip install --upgrade tensorflow
 pip install --upgrade keras
 pip install --upgrade python
 '''
+physical_devices = tf.config.experimental.list_physical_devices('GPU')
+tf.config.experimental.set_memory_growth(physical_devices[0], True)
 
 class SimplePIController:
     def __init__(self, Kp, Ki):
@@ -73,10 +75,10 @@ def telemetry(sid, data):
         imgString = data["image"]
         image = Image.open(BytesIO(base64.b64decode(imgString)))
         image_array = np.asarray(image)
-        tf.image.resize_images(image_array, IMG_SIZE)
+        image_array = tf.image.resize(image_array, IMG_SIZE)
         steering_angle = float(model.predict(image_array[None, :, :, :], batch_size=1))
-        delta = abs(float(steering_angle))-0.05
-        throttle = str(float(throttle)+0.2*float(delta/0.1))
+        delta = abs(float(steering_angle)) - 0.05
+        throttle = str(float(throttle) + 0.2 * float(delta/0.1))
         #throttle=1.0
         throttle = controller.update(float(speed))
 
