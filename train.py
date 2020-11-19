@@ -12,15 +12,16 @@ from keras import utils as np_utils
 from keras.callbacks import ModelCheckpoint
 from tensorflow.python.keras.layers.preprocessing.image_preprocessing import _RandomGenerator
 import random
+from keras.applications import Xception
 
 physical_devices = tf.config.experimental.list_physical_devices('GPU')
 tf.config.experimental.set_memory_growth(physical_devices[0], True)
 
-TRAIN_FILE = R"./CarND-Behavioral-Cloning-P3/data/filenames_angles.csv"
-IMG_DIR = './CarND-Behavioral-Cloning-P3/data/IMG'
-SAVE_DIR = './CarND-Behavioral-Cloning-P3/augmented'
-BATCH_SIZE = 32
-IMG_SIZE = (160, 160)
+TRAIN_FILE = R"./data/filenames_angles.csv"
+IMG_DIR = './data/IMG'
+SAVE_DIR = './augmented'
+BATCH_SIZE = 5
+IMG_SIZE = (299, 299)
 NB_EPOCH = 10
 
 def add_noise(img):
@@ -51,13 +52,13 @@ def buildModel():
     data_augmentation = tf.keras.Sequential([ tf.keras.layers.experimental.preprocessing.RandomContrast([0, 0.5])])
     preprocess_input = tf.keras.applications.mobilenet_v2.preprocess_input
     rescale = tf.keras.layers.experimental.preprocessing.Rescaling(1./127.5, offset= -1)
-    base_model = tf.keras.applications.MobileNetV2(input_shape = IMG_SHAPE, include_top = False, weights = 'imagenet')
+    base_model = tf.keras.applications.Xception(input_shape = IMG_SHAPE, include_top = False, weights = 'imagenet')
     converge = tf.keras.layers.GlobalAveragePooling2D()
     dropout = Dropout(0.2)
     activate = Activation('relu')
 
     # chaining the layers
-    inputs = tf.keras.Input(shape=(160, 160, 3))
+    inputs = tf.keras.Input(shape = IMG_SHAPE)
     x = data_augmentation(inputs)
     x = base_model(x, training = False)
     x = converge(x)

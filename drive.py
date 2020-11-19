@@ -21,12 +21,12 @@ from train import buildModel
 from keras import Model
 from keras.callbacks import ModelCheckpoint
 import tensorflow as tf
+from train import IMG_SIZE
 
 sio = socketio.Server()
 app = Flask(__name__)
 model = None
 prev_image_array = None
-IMG_SIZE = (160, 160)
 
 '''
 pip install --upgrade tensorflow
