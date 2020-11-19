@@ -14,8 +14,6 @@ from tensorflow.python.keras.layers.preprocessing.image_preprocessing import _Ra
 import random
 from keras.applications import Xception
 
-physical_devices = tf.config.experimental.list_physical_devices('GPU')
-tf.config.experimental.set_memory_growth(physical_devices[0], True)
 
 TRAIN_FILE = R"./data/filenames_angles.csv"
 IMG_DIR = './data/IMG'
