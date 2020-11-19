@@ -18,7 +18,7 @@ from keras.applications import Xception
 TRAIN_FILE = R"./data/filenames_angles.csv"
 IMG_DIR = './data/IMG'
 SAVE_DIR = './augmented'
-BATCH_SIZE = 5
+BATCH_SIZE = 100
 IMG_SIZE = (299, 299)
 NB_EPOCH = 10
 
@@ -33,7 +33,7 @@ def add_noise(img):
 
 def buildGenerator():
     train_label_df = pd.read_csv(TRAIN_FILE, delimiter = ',', header = None, names = ['id', 'score'])
-    datagen = ImageDataGenerator(brightness_range = [0.2,1.0], channel_shift_range = 150.0,  validation_split = 0.25, preprocessing_function = add_noise)
+    datagen = ImageDataGenerator(brightness_range = [0.2,1.0], validation_split = 0.25, preprocessing_function = add_noise)
     print("getting train generator")
     train_generator = datagen.flow_from_dataframe(dataframe = train_label_df, directory = IMG_DIR, x_col = "id", y_col = "score", subset = "training", has_ext = True, class_mode = "raw", shuffle = True, target_size = IMG_SIZE, batch_size = BATCH_SIZE, save_to_dir = SAVE_DIR, save_prefix = 'train', save_format = 'jpeg')
     train_generator.next()
@@ -81,6 +81,6 @@ def buildModel():
 if __name__ == "__main__":
     train_generator, valid_generator = buildGenerator()
     model = buildModel()
-    checkpoint = ModelCheckpoint("steering_prediction_model.h5", monitor='val_loss', verbose=1, save_best_only=True, mode='auto', period=1)
+    checkpoint = ModelCheckpoint("steering_prediction_model.h5", monitor = 'val-loss', verbose = 1, save_best_only = True, mode = 'auto', period = 1)
     model.fit_generator(train_generator, steps_per_epoch = train_generator.samples // BATCH_SIZE, validation_data = valid_generator, validation_steps = valid_generator.samples // BATCH_SIZE, epochs = NB_EPOCH, callbacks = [checkpoint])
 
