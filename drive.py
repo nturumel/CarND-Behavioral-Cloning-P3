@@ -20,11 +20,13 @@ from tensorflow.python.keras.saving.hdf5_format import load_weights_from_hdf5_gr
 from train import buildModel
 from keras import Model
 from keras.callbacks import ModelCheckpoint
+import tensorflow as tf
 
 sio = socketio.Server()
 app = Flask(__name__)
 model = None
 prev_image_array = None
+IMG_SIZE = (160, 160)
 
 '''
 pip install --upgrade tensorflow
@@ -71,6 +73,7 @@ def telemetry(sid, data):
         imgString = data["image"]
         image = Image.open(BytesIO(base64.b64decode(imgString)))
         image_array = np.asarray(image)
+        tf.image.resize_images(image_array, IMG_SIZE)
         steering_angle = float(model.predict(image_array[None, :, :, :], batch_size=1))
         delta = abs(float(steering_angle))-0.05
         throttle = str(float(throttle)+0.2*float(delta/0.1))
