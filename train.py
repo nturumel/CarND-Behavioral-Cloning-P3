@@ -33,7 +33,7 @@ def add_noise(img):
 
 def buildGenerator():
     train_label_df = pd.read_csv(TRAIN_FILE, delimiter = ',', header = None, names = ['id', 'score'])
-    datagen = ImageDataGenerator(brightness_range = [0.2,1.0], validation_split = 0.25, preprocessing_function = add_noise)
+    datagen = ImageDataGenerator(brightness_range = [0.2,1.8], validation_split = 0.25, preprocessing_function = add_noise)
     print("getting train generator")
     train_generator = datagen.flow_from_dataframe(dataframe = train_label_df, directory = IMG_DIR, x_col = "id", y_col = "score", subset = "training", has_ext = True, class_mode = "raw", shuffle = True, target_size = IMG_SIZE, batch_size = BATCH_SIZE, save_to_dir = SAVE_DIR, save_prefix = 'train', save_format = 'jpeg')
     train_generator.next()
@@ -47,7 +47,7 @@ def buildModel():
     IMG_SHAPE = IMG_SIZE + (3,)
     
     # define key layers
-    data_augmentation = tf.keras.Sequential([ tf.keras.layers.experimental.preprocessing.RandomContrast([0, 0.5])])
+    data_augmentation = tf.keras.Sequential([ tf.keras.layers.experimental.preprocessing.RandomContrast([0, 0.8])])
     preprocess_input = tf.keras.applications.mobilenet_v2.preprocess_input
     rescale = tf.keras.layers.experimental.preprocessing.Rescaling(1./127.5, offset= -1)
     base_model = tf.keras.applications.Xception(input_shape = IMG_SHAPE, include_top = False, weights = 'imagenet')
