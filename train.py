@@ -21,7 +21,7 @@ IMG_DIR = './data/IMG'
 SAVE_DIR = './augmented'
 BATCH_SIZE = 32
 IMG_SIZE = (160, 160)
-NB_EPOCH = 10
+NB_EPOCH = 20
 
 def add_noise(img):
     '''Add random noise to an image'''
@@ -34,7 +34,7 @@ def add_noise(img):
 
 def buildGenerator():
     train_label_df = pd.read_csv(TRAIN_FILE, delimiter = ',', header = None, names = ['id', 'score'])
-    datagen = ImageDataGenerator(brightness_range = [0.2,1.8],  validation_split = 0.25) 
+    datagen = ImageDataGenerator(brightness_range=[0.2, 1.8], channel_shift_range=150.0, validation_split=0.25)
     print("getting train generator")
     train_generator = datagen.flow_from_dataframe(dataframe = train_label_df, directory = IMG_DIR, x_col = "id", y_col = "score", subset = "training", has_ext = True, class_mode = "raw", shuffle = True, target_size = IMG_SIZE, batch_size = BATCH_SIZE, save_to_dir = SAVE_DIR, save_prefix = 'train', save_format = 'jpeg')
     train_generator.next()
