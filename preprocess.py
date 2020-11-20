@@ -24,8 +24,8 @@ def preprocess():
             right_filename = ntpath.basename(line[2])
 
             filename_angles.append([center_filename, steering_center])
-            #filename_angles.append([left_filename, steering_left])
-            #filename_angles.append([right_filename, steering_right])
+            filename_angles.append([left_filename, steering_left])
+            filename_angles.append([right_filename, steering_right])
             
     with open(data_out, 'w') as filehandle:
         for line in filename_angles:
