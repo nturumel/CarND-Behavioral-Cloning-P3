@@ -18,7 +18,7 @@ from keras.applications import Xception
 TRAIN_FILE = R"./data/filenames_angles.csv"
 IMG_DIR = './data/IMG'
 SAVE_DIR = './augmented'
-BATCH_SIZE = 100
+BATCH_SIZE = 50
 IMG_SIZE = (299, 299)
 NB_EPOCH = 10
 
