@@ -16,9 +16,9 @@ import random
 physical_devices = tf.config.experimental.list_physical_devices('GPU')
 tf.config.experimental.set_memory_growth(physical_devices[0], True)
 
-TRAIN_FILE = R"./CarND-Behavioral-Cloning-P3/data/filenames_angles.csv"
-IMG_DIR = './CarND-Behavioral-Cloning-P3/data/IMG'
-SAVE_DIR = './CarND-Behavioral-Cloning-P3/augmented'
+TRAIN_FILE = R"./data/filenames_angles.csv"
+IMG_DIR = './data/IMG'
+SAVE_DIR = './augmented'
 BATCH_SIZE = 32
 IMG_SIZE = (160, 160)
 NB_EPOCH = 10
