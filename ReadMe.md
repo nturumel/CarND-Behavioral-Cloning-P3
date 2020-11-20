@@ -18,81 +18,100 @@ The goals / steps of this project are the following:
 [image3]: ./examples/center_2020_04_19_21_24_48_878_cropped_flipped.jpg "Flipped"
 [image4]: ./examples/left_2020_04_19_21_24_48_878.jpg "Left"
 [image5]: ./examples/right_2020_04_19_21_24_48_878.jpg "Right Image"
+[image6]: ./examples/result.gif "result"
+
 
 #### 1. Project includes all required files and can be used to run the simulator in autonomous mode
 
 My project includes the following files:
 * model.py containing the script to create and train the model
 * drive.py for driving the car in autonomous mode
-* model.h5 containing a trained convolution neural network 
-* writeup_report.md or writeup_report.pdf summarizing the results
+* steering_prediction_model.h5 containing a trained convolution neural network 
+* ReadMe.md
 
 #### 2. Project includes functional code
 Using the Udacity provided simulator and my drive.py file, the car can be driven autonomously around the track by executing 
 ```sh
-python drive.py model.h5
+python drive.py model
 ```
 
 #### 3. Project code is usable and readable
 
-The model.py file contains the code for training and saving the convolution neural network. The file shows the pipeline I used for training and validating the model, and it contains comments to explain how the code works.
+The preprocess.py generates filenames_angles.csv used for training, train.py trains on images in **'.data\IMG\'** and produces **steering_prediction_model.h5**.
 
 ### Model Architecture and Training Strategy
 
 #### 1. An appropriate model architecture has been employed
 
-My model is based on CNN architechture developed by the autonmous driving team at NVIDIA.
-It consists of:
-| Layer                                                             | (type)       | Description |        |      |     |
-|-------------------------------------------------------------------|--------------|-------------|--------|------|-----|
-| ================================================================= |              |             |        |      |     |
-| lambda_1                                                          | (Lambda)     | (None,      | 160,   | 320, | 3)  |
-| _________________________________________________________________ |              |             |        |      |     |
-| cropping2d_1                                                      | (Cropping2D) | (None,      | 90,    | 320, | 3)  |
-| _________________________________________________________________ |              |             |        |      |     |
-| conv2d_1                                                          | (Conv2D)     | (None,      | 24,    | 5,   | 5)  |
-| _________________________________________________________________ |              |             |        |      |     |
-| Activation_1                                                      | (Activation) | (Relu)      |        |      |     |
-| _________________________________________________________________ |              |             |        |      |     |
-| conv2d_2                                                          | (Conv2D)     | (None,      | 36,    | 5,   | 5)  |
-| _________________________________________________________________ |              |             |        |      |     |
-| Activation_2                                                      | (Activation) | (Relu)      |        |      |     |
-| _________________________________________________________________ |              |             |        |      |     |
-| conv2d_3                                                          | (Conv2D)     | (None,      | 36,    | 5,   | 5)  |
-| _________________________________________________________________ |              |             |        |      |     |
-| Activation_3                                                      | (Activation) | (Relu)      |        |      |     |
-| _________________________________________________________________ |              |             |        |      |     |
-| conv2d_4                                                          | (Conv2D)     | (None,      | 36,    | 5,   | 5)  |
-| _________________________________________________________________ |              |             |        |      |     |
-| Activation_4                                                      | (Activation) | (Relu)      |        |      |     |
-| _________________________________________________________________ |              |             |        |      |     |
-| conv2d_5                                                          | (Conv2D)     | (None,      | 36,    | 5,   | 5)  |
-| _________________________________________________________________ |              |             |        |      |     |
-| max_pooling2d_1                                                   | (MaxPooling2 | (None,      | 21,    | 79,  | 24) |
-| _________________________________________________________________ |              |             |        |      |     |
-| dropout_1                                                         | (Dropout)    | (None,      | 21,    | 79,  | 24) |
-| _________________________________________________________________ |              |             |        |      |     |
-| Activation_5                                                      | (Activation) | (Relu)      |        |      |     |
-| _________________________________________________________________ |              |             |        |      |     |
-| flatten_1                                                         | (Flatten)    | (None,      | 10710) |      |     |
-| _________________________________________________________________ |              |             |        |      |     |
-| Activation_6                                                      | (Activation) | (Relu)      |        |      |     |
-| _________________________________________________________________ |              |             |        |      |     |
-| dense_1                                                           | (Dense)      | (None,      | 100)   |      |     |
-| _________________________________________________________________ |              |             |        |      |     |
-| Activation_7                                                      | (Activation) | (Relu)      |        |      |     |
-| _________________________________________________________________ |              |             |        |      |     |
-| dense_2                                                           | (Dense)      | (None,      | 50)    |      |     |
-| _________________________________________________________________ |              |             |        |      |     |
-| Activation_8                                                      | (Activation) | (Relu)      |        |      |     |
-| _________________________________________________________________ |              |             |        |      |     |
-| Activation_9                                                      | (Activation) | (Relu)      |        |      |     |
-| _________________________________________________________________ |              |             |        |      |     |
-| dense_3                                                           | (Dense)      | (None,      | 10)    |      |     |
-| _________________________________________________________________ |              |             |        |      |     |
-| Activation_10                                                     | (Activation) | (Relu)      |        |      |     |
-| _________________________________________________________________ |              |             |        |      |     |
-| dense_4                                                           | (Dense)      | (None,      | 1)     |      |     |          11
+| Layer (type)                                                                                       	| Output Shape           	| Param #                    	| Connected to                   	|   	|
+|----------------------------------------------------------------------------------------------------	|------------------------	|----------------------------	|--------------------------------	|---	|
+| ================================================================================================== 	|                        	|                            	|                                	|   	|
+| input_2 (InputLayer)                                                                               	| [(None, 160, 160, 3) 0 	|                            	|                                	|   	|
+| __________________________________________________________________________________________________ 	|                        	|                            	|                                	|   	|
+| sequential (Sequential)                                                                            	| (None, 160, 160, 3)    	| 0                          	| input_2[0][0]                  	|   	|
+| __________________________________________________________________________________________________ 	|                        	|                            	|                                	|   	|
+| mobilenetv2_1.00_160 (Functiona (None, 5, 5, 1280)                                                 	| 2257984                	| sequential[0][0]           	|                                	|   	|
+| __________________________________________________________________________________________________ 	|                        	|                            	|                                	|   	|
+| global_average_pooling2d (Globa (None, 1280)                                                       	| 0                      	| mobilenetv2_1.00_160[0][0] 	|                                	|   	|
+| __________________________________________________________________________________________________ 	|                        	|                            	|                                	|   	|
+| dropout (Dropout)                                                                                  	| multiple               	| 0                          	| global_average_pooling2d[0][0] 	|   	|
+| dense[0][0]                                                                                        	|                        	|                            	|                                	|   	|
+| dense_1[0][0]                                                                                      	|                        	|                            	|                                	|   	|
+| dense_2[0][0]                                                                                      	|                        	|                            	|                                	|   	|
+| __________________________________________________________________________________________________ 	|                        	|                            	|                                	|   	|
+| flatten (Flatten)                                                                                  	| (None, 1280)           	| 0                          	| dropout[0][0]                  	|   	|
+| __________________________________________________________________________________________________ 	|                        	|                            	|                                	|   	|
+| dense (Dense)                                                                                      	| (None, 512)            	| 655872                     	| flatten[0][0]                  	|   	|
+| __________________________________________________________________________________________________ 	|                        	|                            	|                                	|   	|
+| activation (Activation)                                                                            	| multiple               	| 0                          	| dropout[1][0]                  	|   	|
+| dropout[2][0]                                                                                      	|                        	|                            	|                                	|   	|
+| dropout[3][0]                                                                                      	|                        	|                            	|                                	|   	|
+| __________________________________________________________________________________________________ 	|                        	|                            	|                                	|   	|
+| dense_1 (Dense)                                                                                    	| (None, 256)            	| 131328                     	| activation[0][0]               	|   	|
+| __________________________________________________________________________________________________ 	|                        	|                            	|                                	|   	|
+| dense_2 (Dense)                                                                                    	| (None, 64)             	| 16448                      	| activation[1][0]               	|   	|
+| __________________________________________________________________________________________________ 	|                        	|                            	|                                	|   	|
+| dense_3 (Dense)                                                                                    	| (None, 1)              	| 65                         	| activation[2][0]               	|   	|
+| ================================================================================================== 	|                        	|                            	|                                	|   	|
+| Total params: 3,061,697                                                                            	|                        	|                            	|                                	|   	|
+| Trainable params: 3,027,585                                                                        	|                        	|                            	|                                	|   	|
+| Non-trainable params: 34,112                                                                       	|                        	|                            	|                                	|   	|
+| __________________________________________________________________________________________________ 	|                        	|                            	|                                	|   	|
+| None                                                                                               	|                        	|                            	|                                	|   	|
+__________________________________________________________________________________________________
+
+
+Transfer Learning was used.
+
+    # define key layers
+    data_augmentation = tf.keras.Sequential([ tf.keras.layers.experimental.preprocessing.RandomContrast([0, 0.5])])
+    preprocess_input = tf.keras.applications.mobilenet_v2.preprocess_input
+    rescale = tf.keras.layers.experimental.preprocessing.Rescaling(1./127.5, offset= -1)
+    base_model = tf.keras.applications.MobileNetV2(input_shape = IMG_SHAPE, include_top = False, weights = 'imagenet')
+    converge = tf.keras.layers.GlobalAveragePooling2D()
+    dropout = Dropout(0.2)
+    activate = Activation('relu')
+
+    # chaining the layers
+    inputs = tf.keras.Input(shape=(160, 160, 3))
+    x = data_augmentation(inputs)
+    x = base_model(x, training = False)
+    x = converge(x)
+    x = dropout(x)
+    x = Flatten()(x)
+    x = Dense(512)(x)
+    x = dropout(x)
+    x = activate(x)
+    x = Dense(256)(x)
+    x = dropout(x)
+    x = activate(x)
+    x = Dense(64)(x)
+    x = dropout(x)
+    x = activate(x)
+    outputs = Dense(1)(x)
+    model = tf.keras.Model(inputs, outputs)
+    opt = keras.optimizers.Adam(learning_rate = 0.0001)
+    model.compile(optimizer = opt, loss='mse')
 
 
 #### 2. Attempts to reduce overfitting in the model
@@ -101,9 +120,12 @@ The model contains dropout layers in order to reduce overfitting.
 
 The model was trained and validated on different data sets to ensure that the model was not overfitting.
 
+The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
+
 I recorded laps in the forward and backward direction to prevent a specific side from dominating the training data.
 
-The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
+    datagen = ImageDataGenerator(brightness_range=[0.2, 1.8], channel_shift_range=150.0, validation_split=0.25)
+    
 
 #### 3. Model parameter tuning
 
@@ -170,9 +192,8 @@ I finally randomly shuffled the data set and put 20% of the data into a validati
 
 #### Adaptative throttle.
 I noticed that sometimes my simulator was sluggish and it had a hard time working out sharp turns. So I decided to manupulate the throttle based on the steering angle. Larger the steering angle lower the speed.
-
+I later abandoned this as it was not required.
 #### Video
-You can find my video here.
-[video ](https://youtu.be/HnYVVjBDCSw)
+![alt text][image6]
 
 
